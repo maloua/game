@@ -16,15 +16,31 @@ public class PlayerScript : MonoBehaviour {
 
 	void FixedUpdate () {
 		rb.AddTorque(transform.right * speed);
+
+		if (IsGrounded()) {
+			if (Input.GetKey(KeyCode.Space)) {
+				rb.AddForce((Vector3.up * thrust), ForceMode.Impulse);
+			}
+
+			if (Input.GetKey(KeyCode.LeftArrow) && !IsLeft()) {
+				rb.AddForce((Vector3.left), ForceMode.Impulse);
+			}
+
+			if (Input.GetKey(KeyCode.RightArrow) && !IsRight()) {
+				rb.AddForce((Vector3.right), ForceMode.Impulse);
+			}
+		}
 	}
 
 	bool IsGrounded() {
 		return(rb.position.y <= initialPosition.y + 0.05);
 	}
 
-	void Update() {
-		if (IsGrounded() && Input.GetKey(KeyCode.Space)) {
-			rb.AddForce((Vector3.up * thrust), ForceMode.Impulse);
-		}
+	bool IsRight() {
+		return(rb.position.x >= initialPosition.x + 0.8);
+	}
+
+	bool IsLeft() {
+		return(rb.position.x <= initialPosition.x - 0.8);
 	}
 }
